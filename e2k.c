@@ -349,8 +349,8 @@ rc5: CNSTI4  "%a"  range(a, 0, 31)
 rc5: reg  "%%%0"
 addr: rc  "0, %0"
 addr: ADDRGP8  "0, %a"
-stk: ADDRFP8 "# ADDRFP8+framesize"
-stk: ADDRLP8 "# ADDRLP8+framesize"
+stk: ADDRFP8 "%a+%F"
+stk: ADDRLP8 "%a+%F"
 addr: stk  "%%r23, %0"
 addr: ADDI8(reg,rc)  "%%%0, %1"
 addr: ADDP8(reg,rc)  "%%%0, %1"
@@ -547,15 +547,17 @@ label: ADDRGP8  "%a"
 stmt: JUMPV(label)  "\tibranch\t%0\n"   2
 stmt: LABELV  "%a:\n"
 
-ctpr1: reg  "\tmovtd\t%0, %%ctpr1\n" 5
-ctpr1: ADDRGP8  "\tdisp\t%%ctpr1, %a\n" 5
-stmt: JUMPV(ctpr1)  "\tct\t%%ctpr1\n" 5
-reg: CALLF8(ctpr1)  "\tcall\t%%ctpr1, wbs = 12\n"  10
-reg: CALLF4(ctpr1)  "\tcall\t%%ctpr1, wbs = 12\n"  10
-reg: CALLI4(ctpr1)  "\tcall\t%%ctpr1, wbs = 12\n"  10
-reg: CALLP8(ctpr1)  "\tcall\t%%ctpr1, wbs = 12\n"  10
-reg: CALLU4(ctpr1)  "\tcall\t%%ctpr1, wbs = 12\n"  10
-stmt: CALLV(ctpr1)  "\tcall\t%%ctpr1, wbs = 12\n"  10
+ctpr1: reg  "\tmovtd\t%%%0, %%ctpr1" 5
+ctpr1: ADDRGP8  "\tdisp\t%%ctpr1, %a" 5
+stmt: JUMPV(ctpr1)  "%0\n\tct\t%%ctpr1\n" 5
+reg: CALLI4(ctpr1)  "%0\n\tcall\t%%ctpr1, wbs = 12\n"  10
+reg: CALLI8(ctpr1)  "%0\n\tcall\t%%ctpr1, wbs = 12\n"  10
+reg: CALLU4(ctpr1)  "%0\n\tcall\t%%ctpr1, wbs = 12\n"  10
+reg: CALLU8(ctpr1)  "%0\n\tcall\t%%ctpr1, wbs = 12\n"  10
+reg: CALLP8(ctpr1)  "%0\n\tcall\t%%ctpr1, wbs = 12\n"  10
+reg: CALLF4(ctpr1)  "%0\n\tcall\t%%ctpr1, wbs = 12\n"  10
+reg: CALLF8(ctpr1)  "%0\n\tcall\t%%ctpr1, wbs = 12\n"  10
+stmt: CALLV(ctpr1)  "%0\n\tcall\t%%ctpr1, wbs = 12\n"  10
 stmt: CALLB(ctpr1,reg)  "# CALLB\n"  10
 
 stmt: RETI4(reg)  "# ret\n"  1
@@ -747,10 +749,6 @@ static void blkcopy_e2k(const char *dreg, int doff, const char *sreg, int soff, 
 
 static void emit2(Node p) {
 	switch (p->op) {
-	case ADDRF+P+sizeop(8):
-	case ADDRL+P+sizeop(8):
-		print("%s+%d", p->syms[0]->x.name, framesize);
-		break;
 	case ARG+B: {
 		int size = p->syms[0]->u.c.v.i;
 		int pos = p->syms[RX]->u.c.v.i;
@@ -777,9 +775,10 @@ static void emit2(Node p) {
 		break;
 	}
 	case CALL+B: {
-		const char *dst = p->x.kids[1]->syms[RX]->x.name;
+		const char *dst = p->kids[1]->syms[RX]->x.name;
 		int size = p->syms[1]->u.c.v.i;
-		print("\tcall\t%%ctpr1, wbs = 12\n");
+		emitasm(p->kids[0], _ctpr1_NT);
+		print("\n\tcall\t%%ctpr1, wbs = 12\n");
 		blkcopy_e2k(dst, 0, "!r23", 0, size);
 		break;
 	}
