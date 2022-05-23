@@ -4,7 +4,7 @@
 
     $ git clone --depth=1 https://github.com/drh/lcc lcc-src
     $ patch -N -p1 -d lcc-src < lcc-e2k.patch
-    $ cp e2k.md lcc-src/src/
+    $ cp e2k.c lcc-src/src/e2k.md
 
 ### Building
 

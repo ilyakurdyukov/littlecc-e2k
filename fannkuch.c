@@ -42,12 +42,12 @@ int fannkuchredux(int n, int *check) {
 	int flipsMax = 0, permCount = 0, checksum = 0;
 	int i, k, r = n, flips;
 
-  perm = (int*)calloc(n*3, sizeof(*perm));
-  perm1 = perm + n;
-  count = perm1 + n;
+	perm = (int*)calloc(n*3, sizeof(*perm));
+	perm1 = perm + n;
+	count = perm1 + n;
 
-  for (i = 0; i < n; i++) perm1[i] = i; // initial (trivial) permu
-  for (;;) {
+	for (i = 0; i < n; i++) perm1[i] = i; // initial (trivial) permu
+	for (;;) {
 		for (; r != 1; r--) count[r-1] = r;
 		for (i = 0; i < n; i++) perm[i] = perm1[i];
 		flips = 0;
