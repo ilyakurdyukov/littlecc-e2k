@@ -482,44 +482,47 @@ reg: MODU4(reg,rc)  "\tsxt\t6, %%%0, %%r8\n\tumodx\t%%r8, %1, %%%c\n"  11
 reg: MODI8(rc5,rc)  "\tsdivd\t%0, %1, %%r8\n\tmuld\t%%r8, %1, %%r8\n\tsubd\t%0, %%r8, %%%c\n"  17
 reg: MODU8(rc5,rc)  "\tudivd\t%0, %1, %%r8\n\tmuld\t%%r8, %1, %%r8\n\tsubd\t%0, %%r8, %%%c\n"  17
 
-stmt: EQI4(rc5,rc)  "\tcmpesb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: EQU4(rc5,rc)  "\tcmpesb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LEI4(rc5,rc)  "\tcmplesb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LEU4(rc5,rc)  "\tcmpbesb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LTI4(rc5,rc)  "\tcmplsb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LTU4(rc5,rc)  "\tcmpbsb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: NEI4(rc5,rc)  "\tcmpesb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: NEU4(rc5,rc)  "\tcmpesb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GEI4(rc5,rc)  "\tcmplsb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GEU4(rc5,rc)  "\tcmpbsb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GTI4(rc5,rc)  "\tcmplesb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GTU4(rc5,rc)  "\tcmpbesb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
+pred0: EQI4(rc5,rc)  "cmpesb\t%0, %1"
+pred0: EQU4(rc5,rc)  "cmpesb\t%0, %1"
+pred0: LEI4(rc5,rc)  "cmplesb\t%0, %1"
+pred0: LEU4(rc5,rc)  "cmpbesb\t%0, %1"
+pred0: LTI4(rc5,rc)  "cmplsb\t%0, %1"
+pred0: LTU4(rc5,rc)  "cmpbsb\t%0, %1"
+npred0: NEI4(rc5,rc)  "cmpesb\t%0, %1"
+npred0: NEU4(rc5,rc)  "cmpesb\t%0, %1"
+npred0: GEI4(rc5,rc)  "cmplsb\t%0, %1"
+npred0: GEU4(rc5,rc)  "cmpbsb\t%0, %1"
+npred0: GTI4(rc5,rc)  "cmplesb\t%0, %1"
+npred0: GTU4(rc5,rc)  "cmpbesb\t%0, %1"
 
-stmt: EQI8(rc5,rc)  "\tcmpedb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: EQU8(rc5,rc)  "\tcmpedb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LEI8(rc5,rc)  "\tcmpledb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LEU8(rc5,rc)  "\tcmpbedb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LTI8(rc5,rc)  "\tcmpldb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LTU8(rc5,rc)  "\tcmpbdb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: NEI8(rc5,rc)  "\tcmpedb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: NEU8(rc5,rc)  "\tcmpedb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GEI8(rc5,rc)  "\tcmpldb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GEU8(rc5,rc)  "\tcmpbdb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GTI8(rc5,rc)  "\tcmpledb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GTU8(rc5,rc)  "\tcmpbedb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
+pred0: EQI8(rc5,rc)  "cmpedb\t%0, %1"
+pred0: EQU8(rc5,rc)  "cmpedb\t%0, %1"
+pred0: LEI8(rc5,rc)  "cmpledb\t%0, %1"
+pred0: LEU8(rc5,rc)  "cmpbedb\t%0, %1"
+pred0: LTI8(rc5,rc)  "cmpldb\t%0, %1"
+pred0: LTU8(rc5,rc)  "cmpbdb\t%0, %1"
+npred0: NEI8(rc5,rc)  "cmpedb\t%0, %1"
+npred0: NEU8(rc5,rc)  "cmpedb\t%0, %1"
+npred0: GEI8(rc5,rc)  "cmpldb\t%0, %1"
+npred0: GEU8(rc5,rc)  "cmpbdb\t%0, %1"
+npred0: GTI8(rc5,rc)  "cmpledb\t%0, %1"
+npred0: GTU8(rc5,rc)  "cmpbedb\t%0, %1"
 
-stmt: EQF4(rc5,rc)  "\tfcmpeqsb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: EQF8(rc5,rc)  "\tfcmpeqdb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LEF4(rc5,rc)  "\tfcmplesb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LEF8(rc5,rc)  "\tfcmpledb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LTF4(rc5,rc)  "\tfcmpltsb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: LTF8(rc5,rc)  "\tfcmpltdb\t%0, %1, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
-stmt: NEF4(rc5,rc)  "\tfcmpeqsb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: NEF8(rc5,rc)  "\tfcmpeqsb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GEF4(rc5,rc)  "\tfcmpltsb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GEF8(rc5,rc)  "\tfcmpltdb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GTF4(rc5,rc)  "\tfcmplesb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
-stmt: GTF8(rc5,rc)  "\tfcmpledb\t%0, %1, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
+pred0: EQF4(rc5,rc)  "fcmpeqsb\t%0, %1"
+pred0: EQF8(rc5,rc)  "fcmpeqdb\t%0, %1"
+pred0: LEF4(rc5,rc)  "fcmplesb\t%0, %1"
+pred0: LEF8(rc5,rc)  "fcmpledb\t%0, %1"
+pred0: LTF4(rc5,rc)  "fcmpltsb\t%0, %1"
+pred0: LTF8(rc5,rc)  "fcmpltdb\t%0, %1"
+npred0: NEF4(rc5,rc)  "fcmpeqsb\t%0, %1"
+npred0: NEF8(rc5,rc)  "fcmpeqsb\t%0, %1"
+npred0: GEF4(rc5,rc)  "fcmpltsb\t%0, %1"
+npred0: GEF8(rc5,rc)  "fcmpltdb\t%0, %1"
+npred0: GTF4(rc5,rc)  "fcmplesb\t%0, %1"
+npred0: GTF8(rc5,rc)  "fcmpledb\t%0, %1"
+
+stmt: pred0  "\t%0, %%pred0\n\tibranch\t%a ? %%pred0\n"  4
+stmt: npred0  "\t%0, %%pred0\n\tibranch\t%a ? ~%%pred0\n"  4
 
 reg: ADDF4(reg,reg)  "\tfadds\t%%%0, %%%1, %%%c\n"  1
 reg: ADDF8(reg,reg)  "\tfaddd\t%%%0, %%%1, %%%c\n"  1
