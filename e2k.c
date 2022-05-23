@@ -712,7 +712,30 @@ static void doarg(Node p) {
 /* TODO: better implementation */
 static void blkcopy_e2k(const char *dreg, int doff, const char *sreg, int soff, int size) {
 	int i, tmp[3] = { 8, 9, 10 };
-	if (dreg[0] == '!') { dreg++; doff += framesize; }
+	if (dreg[0] == '!') {
+		dreg++; doff += framesize;
+		if (size <= 64) {
+			int c2 = 0, rn = atoi(dreg + 1);
+			for (i = 0; size > 0; size -= 8, i += 8) {
+				char c = size > 4 ? 'd' : "0bhww"[size];
+				if (i >> 3 == rn) c2 = c;
+				else print("\tld%c\t%%%s, %d, %%r%d\n", c, sreg, soff + i, i >> 3);
+			}
+			if (c2)
+				print("\tld%c\t%%%s, %d, %%r%d\n", c2, sreg, soff + rn * 8, rn);
+			return;
+		}
+	}
+	if (sreg[0] == '!') {
+		sreg++;
+		if (size <= 64) {
+			for (i = 0; size > 0; size -= 8, i += 8) {
+				char c = size > 4 ? 'd' : "0bhww"[size];
+				print("\tst%c\t%%%s, %d, %%b[%d]\n", c, dreg, doff + i, i >> 3);
+			}
+			return;
+		}
+	}
 	print("\t! memcpy(%s+%d, %s+%d, %d)\n", dreg, doff, sreg, soff, size);
 	for (i = 0; size > 0; size -= 8, i += 8) {
 		char c = size > 4 ? 'd' : "0bhww"[size];
@@ -757,7 +780,7 @@ static void emit2(Node p) {
 		const char *dst = p->x.kids[1]->syms[RX]->x.name;
 		int size = p->syms[1]->u.c.v.i;
 		print("\tcall\t%%ctpr1, wbs = 12\n");
-		blkcopy_e2k(dst, 0, "r23", 0, size);
+		blkcopy_e2k(dst, 0, "!r23", 0, size);
 		break;
 	}
 	}
