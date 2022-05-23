@@ -1,0 +1,56 @@
+diff --git a/makefile b/makefile
+index c96afff..af1e92a 100755
+--- a/makefile
++++ b/makefile
+@@ -61,6 +61,7 @@ RCCOBJS=$Balloc$O \
+ 	$Bmips$O \
+ 	$Bsparc$O \
+ 	$Bstab$O \
++	$Be2k$O \
+ 	$Bx86$O \
+ 	$Bx86linux$O
+ 
+@@ -108,6 +109,7 @@ $Bmips$O:	$Bmips.c;	$(CC) $(CFLAGS) -c -Isrc -o $@ $Bmips.c
+ $Bsparc$O:	$Bsparc.c;	$(CC) $(CFLAGS) -c -Isrc -o $@ $Bsparc.c
+ $Bx86$O:	$Bx86.c;	$(CC) $(CFLAGS) -c -Isrc -o $@ $Bx86.c
+ $Bx86linux$O:	$Bx86linux.c;	$(CC) $(CFLAGS) -c -Isrc -o $@ $Bx86linux.c
++$Be2k$O:	$Be2k.c;	$(CC) $(CFLAGS) -c -Isrc -o $@ $Be2k.c
+ 
+ $Bdagcheck.c:	$Blburg$E src/dagcheck.md; $Blburg src/dagcheck.md $@
+ $Balpha.c:	$Blburg$E src/alpha.md;    $Blburg src/alpha.md    $@
+@@ -115,6 +117,7 @@ $Bmips.c:	$Blburg$E src/mips.md;     $Blburg src/mips.md     $@
+ $Bsparc.c:	$Blburg$E src/sparc.md;    $Blburg src/sparc.md    $@
+ $Bx86.c:	$Blburg$E src/x86.md;      $Blburg src/x86.md      $@
+ $Bx86linux.c:	$Blburg$E src/x86linux.md; $Blburg src/x86linux.md $@
++$Be2k.c:	$Blburg$E src/e2k.md; $Blburg src/e2k.md $@
+ 
+ $Bbprint$E:	$Bbprint$O;		$(LD) $(LDFLAGS) -o $@ $Bbprint$O 
+ $Bops$E:	$Bops$O;		$(LD) $(LDFLAGS) -o $@ $Bops$O 
+@@ -222,6 +225,7 @@ testclean:
+ clean::		testclean
+ 		$(RM) $B*$O
+ 		$(RM) $Bdagcheck.c $Balpha.c $Bmips.c $Bx86.c $Bsparc.c $Bx86linux.c
++		$(RM) $Be2k.c
+ 		$(RM) $Brcc1$E $Brcc1$E $B1rcc$E $B2rcc$E
+ 		$(RM) $B*.ilk
+ 
+@@ -262,6 +266,7 @@ RCCSRCS=src/alloc.c \
+ 	$Balpha.c \
+ 	$Bmips.c \
+ 	$Bsparc.c \
++	$Be2k.c \
+ 	$Bx86linux.c \
+ 	$Bx86.c
+ 
+diff --git a/src/bind.c b/src/bind.c
+index bb26eee..58a631d 100755
+--- a/src/bind.c
++++ b/src/bind.c
+@@ -7,6 +7,7 @@ xx(sparc/sun,    sparcIR) \
+ xx(sparc/solaris,solarisIR) \
+ xx(x86/win32,    x86IR) \
+ xx(x86/linux,    x86linuxIR) \
++xx(e2k/linux,    e2kIR) \
+ xx(symbolic/osf, symbolic64IR) \
+ xx(symbolic/irix,symbolicIR) \
+ xx(symbolic,     symbolicIR) \
