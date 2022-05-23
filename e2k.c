@@ -700,6 +700,7 @@ static void clobber(Node p) {
 	}
 	case MOD+I: case MOD+U:
 		spill(1 << 8, IREG, p);
+		break;
 	case ASGN+B: case CALL+B:
 		spill(7 << 8, IREG, p);
 		break;
