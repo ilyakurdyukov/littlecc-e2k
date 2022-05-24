@@ -439,12 +439,36 @@ reg: RSHU4(rc5,rc)  "\tshrs\t%0, %1, %%%c\n"  1
 reg: RSHI8(rc5,rc)  "\tsard\t%0, %1, %%%c\n"  1
 reg: RSHU8(rc5,rc)  "\tshrd\t%0, %1, %%%c\n"  1
 
-reg: BANDI4(BCOMI4(rc5),rc)  "\tandns\t%0, %1, %%%c\n"  1
-reg: BANDU4(BCOMU4(rc5),rc)  "\tandns\t%0, %1, %%%c\n"  1
-reg: BORI4(BCOMI4(rc5),rc)   "\torns\t%0, %1, %%%c\n"  1
-reg: BORU4(BCOMU4(rc5),rc)   "\torns\t%0, %1, %%%c\n"  1
-reg: BXORI4(BCOMI4(rc5),rc)  "\txorns\t%0, %1, %%%c\n"  1
-reg: BXORU4(BCOMU4(rc5),rc)  "\txorns\t%0, %1, %%%c\n"  1
+reg4n: BCOMI4(reg)  "%%%0"
+reg4n: BCOMU4(reg)  "%%%0"
+reg8n: BCOMI8(reg)  "%%%0"
+reg8n: BCOMU8(reg)  "%%%0"
+
+reg: BANDI4(reg4n,rc5)  "\tandns\t%1, %0, %%%c\n"  1
+reg: BANDU4(reg4n,rc5)  "\tandns\t%1, %0, %%%c\n"  1
+reg: BANDI8(reg8n,rc5)  "\tandnd\t%1, %0, %%%c\n"  1
+reg: BANDU8(reg8n,rc5)  "\tandnd\t%1, %0, %%%c\n"  1
+reg: BORI4(reg4n,rc5)   "\torns\t%1, %0, %%%c\n"  1
+reg: BORU4(reg4n,rc5)   "\torns\t%1, %0, %%%c\n"  1
+reg: BORI8(reg8n,rc5)   "\tornd\t%1, %0, %%%c\n"  1
+reg: BORU8(reg8n,rc5)   "\tornd\t%1, %0, %%%c\n"  1
+reg: BXORI4(reg4n,rc5)  "\txorns\t%1, %0, %%%c\n"  1
+reg: BXORU4(reg4n,rc5)  "\txorns\t%1, %0, %%%c\n"  1
+reg: BXORI8(reg8n,rc5)  "\txorns\t%1, %0, %%%c\n"  1
+reg: BXORU8(reg8n,rc5)  "\txorns\t%1, %0, %%%c\n"  1
+
+reg: BANDI4(rc5,reg4n)  "\tandns\t%0, %1, %%%c\n"  1
+reg: BANDU4(rc5,reg4n)  "\tandns\t%0, %1, %%%c\n"  1
+reg: BANDI8(rc5,reg8n)  "\tandnd\t%0, %1, %%%c\n"  1
+reg: BANDU8(rc5,reg8n)  "\tandnd\t%0, %1, %%%c\n"  1
+reg: BORI4(rc5,reg4n)   "\torns\t%0, %1, %%%c\n"  1
+reg: BORU4(rc5,reg4n)   "\torns\t%0, %1, %%%c\n"  1
+reg: BORI8(rc5,reg8n)   "\tornd\t%0, %1, %%%c\n"  1
+reg: BORU8(rc5,reg8n)   "\tornd\t%0, %1, %%%c\n"  1
+reg: BXORI4(rc5,reg4n)  "\txorns\t%0, %1, %%%c\n"  1
+reg: BXORU4(rc5,reg4n)  "\txorns\t%0, %1, %%%c\n"  1
+reg: BXORI8(rc5,reg8n)  "\txorns\t%0, %1, %%%c\n"  1
+reg: BXORU8(rc5,reg8n)  "\txorns\t%0, %1, %%%c\n"  1
 
 reg: NEGI4(reg)   "\tsubs\t0, %%%0, %%%c\n"  1
 reg: NEGI8(reg)   "\tsubd\t0, %%%0, %%%c\n"  1
