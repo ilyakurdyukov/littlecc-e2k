@@ -480,10 +480,10 @@ reg: CVIU8(reg)  "\tsxt\t2, %%%0, %%%c\n"  cvtsize(4, 1)
 reg: CVUI8(reg)  "\tsxt\t6, %%%0, %%%c\n"  cvtsize(4, 1)
 reg: CVUU8(reg)  "\tsxt\t6, %%%0, %%%c\n"  cvtsize(4, 1)
 
-reg: MULI4(rc5,rc)  "\tmuls\t%0, %1, %%%c\n"  6
-reg: MULU4(rc5,rc)  "\tmuls\t%0, %1, %%%c\n"  6
-reg: MULI8(rc5,rc)  "\tmuld\t%0, %1, %%%c\n"  6
-reg: MULU8(rc5,rc)  "\tmuld\t%0, %1, %%%c\n"  6
+reg: MULI4(rc,rc5)  "\tmuls\t%1, %0, %%%c\n"  6
+reg: MULU4(rc,rc5)  "\tmuls\t%1, %0, %%%c\n"  6
+reg: MULI8(rc,rc5)  "\tmuld\t%1, %0, %%%c\n"  6
+reg: MULU8(rc,rc5)  "\tmuld\t%1, %0, %%%c\n"  6
 reg: DIVI4(rc5,rc)  "\tsdivs\t%0, %1, %%%c\n"  10
 reg: DIVU4(rc5,rc)  "\tudivs\t%0, %1, %%%c\n"  10
 reg: DIVI8(rc5,rc)  "\tsdivd\t%0, %1, %%%c\n"  10
@@ -492,6 +492,16 @@ reg: MODI4(reg,rc)  "\tsxt\t2, %%%0, %%r8\n\tsmodx\t%%r8, %1, %%%c\n"  11
 reg: MODU4(reg,rc)  "\tsxt\t6, %%%0, %%r8\n\tumodx\t%%r8, %1, %%%c\n"  11
 reg: MODI8(rc5,rc)  "\tsdivd\t%0, %1, %%r8\n\tmuld\t%%r8, %1, %%r8\n\tsubd\t%0, %%r8, %%%c\n"  17
 reg: MODU8(rc5,rc)  "\tudivd\t%0, %1, %%r8\n\tmuld\t%%r8, %1, %%r8\n\tsubd\t%0, %%r8, %%%c\n"  17
+
+con0:  CNSTI4  "0"  range(a, 0, 0)
+con0:  CNSTU4  "0"  range(a, 0, 0)
+con0:  CNSTI8  "0"  range(a, 0, 0)
+con0:  CNSTU8  "0"  range(a, 0, 0)
+
+pred0: EQI4(BANDI4(rc5,rc),con0) "cmpandesb\t%0, %1"
+pred0: EQI8(BANDI8(rc5,rc),con0) "cmpandedb\t%0, %1"
+npred0: NEI4(BANDI4(rc5,rc),con0) "cmpandesb\t%0, %1"
+npred0: NEI8(BANDI8(rc5,rc),con0) "cmpandedb\t%0, %1"
 
 pred0: EQI4(rc5,rc)  "cmpesb\t%0, %1"
 pred0: EQU4(rc5,rc)  "cmpesb\t%0, %1"
