@@ -23,10 +23,10 @@ int gettimeofday(struct timeval*, void*);
 #include <sys/time.h>
 #endif
 
-static int gettime() {
+static long long get_time_usec() {
 	struct timeval time;
 	gettimeofday(&time, NULL);
-	return time.tv_sec * 1000 + time.tv_usec / 1000;
+	return time.tv_sec * (long long)1000000 + time.tv_usec;
 }
 
 /* The Computer Language Benchmarks Game
@@ -89,18 +89,18 @@ int fannkuchredux(int n, int *check) {
 }
 
 int main(int argc, char **argv) {
-	unsigned time; int i;
+	long long time; int i;
 
 	for (i = 1; i < argc; i++) {
 		int n = atoi(argv[i]);
 		int result, check = 0;
 
-		time = gettime();
+		time = get_time_usec();
 		result = fannkuchredux(n, &check);
-		time = gettime() - time;
+		time = get_time_usec() - time;
 
 		printf("%d\nPfannkuchen(%d) = %d\n", check, n, result);
-		printf("time = %dms\n", time);
+		printf("time = %.3fms\n", time * 0.001);
 	}
 	return 0;
 }

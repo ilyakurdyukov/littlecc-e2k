@@ -347,11 +347,12 @@ stmt: reg  ""
 rc: con  "%0"
 rc: reg  "%%%0"
 rc5: CNSTI4  "%a"  range(a, 0, 31)
+rc5: CNSTI8  "%a"  range(a, 0, 31)
 rc5: reg  "%%%0"
 addr: rc  "0, %0"
 addr: ADDRGP8  "0, %a"
-stk: ADDRFP8 "%a+%F"
-stk: ADDRLP8 "%a+%F"
+stk: ADDRFP8  "%a+%F"
+stk: ADDRLP8  "%a+%F"
 addr: stk  "%%r23, %0"
 addr: ADDI8(reg,rc)  "%%%0, %1"
 addr: ADDP8(reg,rc)  "%%%0, %1"
@@ -359,9 +360,9 @@ addr: ADDU8(reg,rc)  "%%%0, %1"
 
 reg: addr "\taddd\t%0, %%%c\n"  1
 
-reg: INDIRI1(addr)  "\tldb\t%0, %%%c\n"  2
-reg: INDIRI2(addr)  "\tldh\t%0, %%%c\n"  2
-reg: INDIRI4(addr)  "\tldw\t%0, %%%c\n"  2
+reg: INDIRI1(addr)  "\tldb\t%0, %%%c\n"  1
+reg: INDIRI2(addr)  "\tldh\t%0, %%%c\n"  1
+reg: INDIRI4(addr)  "\tldw\t%0, %%%c\n"  1
 reg: INDIRI8(addr)  "\tldd\t%0, %%%c\n"  1
 reg: INDIRU1(addr)  "\tldb\t%0, %%%c\n"  1
 reg: INDIRU2(addr)  "\tldh\t%0, %%%c\n"  1
@@ -384,10 +385,14 @@ stmt: ASGNF4(addr,reg)  "\tstw\t%0, %%%1\n"  1
 stmt: ASGNF8(addr,reg)  "\tstd\t%0, %%%1\n"  1
 
 reg: CVUU4(INDIRU1(addr))  "\tldb\t%0, %%%c\n"  1
+reg: CVUU8(INDIRU1(addr))  "\tldb\t%0, %%%c\n"  1
 reg: CVUU4(INDIRU2(addr))  "\tldh\t%0, %%%c\n"  1
+reg: CVUU8(INDIRU2(addr))  "\tldh\t%0, %%%c\n"  1
 reg: CVUU8(INDIRU4(addr))  "\tldw\t%0, %%%c\n"  1
 reg: CVUI4(INDIRU1(addr))  "\tldb\t%0, %%%c\n"  1
+reg: CVUI8(INDIRU1(addr))  "\tldb\t%0, %%%c\n"  1
 reg: CVUI4(INDIRU2(addr))  "\tldh\t%0, %%%c\n"  1
+reg: CVUI8(INDIRU2(addr))  "\tldh\t%0, %%%c\n"  1
 reg: CVUI8(INDIRU4(addr))  "\tldw\t%0, %%%c\n"  1
 
 reg: LOADI1(reg)  "\tadds\t0, %%%0, %%%c\n"  move(a)
@@ -457,16 +462,21 @@ reg: CVUU4(reg)  "\tsxt\t4, %%%0, %%%c\n"  cvtsize(1, 1)
 reg: CVUI4(reg)  "\tsxt\t5, %%%0, %%%c\n"  cvtsize(2, 1)
 reg: CVUU4(reg)  "\tsxt\t5, %%%0, %%%c\n"  cvtsize(2, 1)
 
-reg: CVII8(reg)  "\tsxt\t0, %%%0, %%%c\n"  cvtsize(1, 1)
-reg: CVIU8(reg)  "\tsxt\t0, %%%0, %%%c\n"  cvtsize(1, 1)
-reg: CVII8(reg)  "\tsxt\t1, %%%0, %%%c\n"  cvtsize(2, 1)
-reg: CVIU8(reg)  "\tsxt\t1, %%%0, %%%c\n"  cvtsize(2, 1)
+reg1i: CVII4(reg)  "%%%0"  cvtsize(1, 0)
+reg2i: CVII4(reg)  "%%%0"  cvtsize(2, 0)
+reg1u: CVUI4(reg)  "%%%0"  cvtsize(1, 0)
+reg2u: CVUI4(reg)  "%%%0"  cvtsize(2, 0)
+reg: CVII8(reg1i)  "\tsxt\t0, %0, %%%c\n"  1
+reg: CVII8(reg2i)  "\tsxt\t1, %0, %%%c\n"  1
+reg: CVIU8(reg1i)  "\tsxt\t0, %0, %%%c\n"  1
+reg: CVIU8(reg2i)  "\tsxt\t1, %0, %%%c\n"  1
+reg: CVII8(reg1u)  "\tsxt\t4, %0, %%%c\n"  1
+reg: CVII8(reg2u)  "\tsxt\t5, %0, %%%c\n"  1
+reg: CVIU8(reg1u)  "\tsxt\t4, %0, %%%c\n"  1
+reg: CVIU8(reg2u)  "\tsxt\t5, %0, %%%c\n"  1
+
 reg: CVII8(reg)  "\tsxt\t2, %%%0, %%%c\n"  cvtsize(4, 1)
 reg: CVIU8(reg)  "\tsxt\t2, %%%0, %%%c\n"  cvtsize(4, 1)
-reg: CVUI8(reg)  "\tsxt\t4, %%%0, %%%c\n"  cvtsize(1, 1)
-reg: CVUU8(reg)  "\tsxt\t4, %%%0, %%%c\n"  cvtsize(1, 1)
-reg: CVUI8(reg)  "\tsxt\t5, %%%0, %%%c\n"  cvtsize(2, 1)
-reg: CVUU8(reg)  "\tsxt\t5, %%%0, %%%c\n"  cvtsize(2, 1)
 reg: CVUI8(reg)  "\tsxt\t6, %%%0, %%%c\n"  cvtsize(4, 1)
 reg: CVUU8(reg)  "\tsxt\t6, %%%0, %%%c\n"  cvtsize(4, 1)
 
@@ -832,12 +842,14 @@ static void function(Symbol f, Symbol caller[], Symbol callee[], int ncalls) {
 			q->sclass = REGISTER;
 			askregvar(q, ireg[offset >> 3]);
 			assert(q->x.regnode);
+			q->type = p->type;
 			autoargs = 1;
 		} else {
 			p->sclass = q->sclass = REGISTER;
 			askregvar(p, ireg[offset >> 3]);
 			assert(p->x.regnode);
 			q->x.name = p->x.name;
+			q->type = p->type;
 		}
 		offset += size;
 	}
