@@ -35,6 +35,7 @@ static Symbol ireg[32], iregw, *breg = ireg + 24;
 static int retstruct;
 static int cseg;
 
+#define cvtsize(size, cost) (a->syms[0]->u.c.v.i == size ? cost : LBURG_MAX)
 %}
 %start stmt
 %term CNSTF4=4113
@@ -447,27 +448,27 @@ reg: BCOMU4(reg)  "\txorns\t0, %%%0, %%%c\n"  1
 reg: BCOMI8(reg)  "\txornd\t0, %%%0, %%%c\n"  1
 reg: BCOMU8(reg)  "\txornd\t0, %%%0, %%%c\n"  1
 
-reg: CVII4(reg)  "\tsxt\t0, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 1 ? 1 : LBURG_MAX)
-reg: CVIU4(reg)  "\tsxt\t0, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 1 ? 1 : LBURG_MAX)
-reg: CVII4(reg)  "\tsxt\t1, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 2 ? 1 : LBURG_MAX)
-reg: CVIU4(reg)  "\tsxt\t1, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 2 ? 1 : LBURG_MAX)
-reg: CVUI4(reg)  "\tsxt\t4, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 1 ? 1 : LBURG_MAX)
-reg: CVUU4(reg)  "\tsxt\t4, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 1 ? 1 : LBURG_MAX)
-reg: CVUI4(reg)  "\tsxt\t5, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 2 ? 1 : LBURG_MAX)
-reg: CVUU4(reg)  "\tsxt\t5, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 2 ? 1 : LBURG_MAX)
+reg: CVII4(reg)  "\tsxt\t0, %%%0, %%%c\n"  cvtsize(1, 1)
+reg: CVIU4(reg)  "\tsxt\t0, %%%0, %%%c\n"  cvtsize(1, 1)
+reg: CVII4(reg)  "\tsxt\t1, %%%0, %%%c\n"  cvtsize(2, 1)
+reg: CVIU4(reg)  "\tsxt\t1, %%%0, %%%c\n"  cvtsize(2, 1)
+reg: CVUI4(reg)  "\tsxt\t4, %%%0, %%%c\n"  cvtsize(1, 1)
+reg: CVUU4(reg)  "\tsxt\t4, %%%0, %%%c\n"  cvtsize(1, 1)
+reg: CVUI4(reg)  "\tsxt\t5, %%%0, %%%c\n"  cvtsize(2, 1)
+reg: CVUU4(reg)  "\tsxt\t5, %%%0, %%%c\n"  cvtsize(2, 1)
 
-reg: CVII8(reg)  "\tsxt\t0, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 1 ? 1 : LBURG_MAX)
-reg: CVIU8(reg)  "\tsxt\t0, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 1 ? 1 : LBURG_MAX)
-reg: CVII8(reg)  "\tsxt\t1, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 2 ? 1 : LBURG_MAX)
-reg: CVIU8(reg)  "\tsxt\t1, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 2 ? 1 : LBURG_MAX)
-reg: CVII8(reg)  "\tsxt\t2, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 4 ? 1 : LBURG_MAX)
-reg: CVIU8(reg)  "\tsxt\t2, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 4 ? 1 : LBURG_MAX)
-reg: CVUI8(reg)  "\tsxt\t4, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 1 ? 1 : LBURG_MAX)
-reg: CVUU8(reg)  "\tsxt\t4, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 1 ? 1 : LBURG_MAX)
-reg: CVUI8(reg)  "\tsxt\t5, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 2 ? 1 : LBURG_MAX)
-reg: CVUU8(reg)  "\tsxt\t5, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 2 ? 1 : LBURG_MAX)
-reg: CVUI8(reg)  "\tsxt\t6, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 4 ? 1 : LBURG_MAX)
-reg: CVUU8(reg)  "\tsxt\t6, %%%0, %%%c\n" (a->syms[0]->u.c.v.i == 4 ? 1 : LBURG_MAX)
+reg: CVII8(reg)  "\tsxt\t0, %%%0, %%%c\n"  cvtsize(1, 1)
+reg: CVIU8(reg)  "\tsxt\t0, %%%0, %%%c\n"  cvtsize(1, 1)
+reg: CVII8(reg)  "\tsxt\t1, %%%0, %%%c\n"  cvtsize(2, 1)
+reg: CVIU8(reg)  "\tsxt\t1, %%%0, %%%c\n"  cvtsize(2, 1)
+reg: CVII8(reg)  "\tsxt\t2, %%%0, %%%c\n"  cvtsize(4, 1)
+reg: CVIU8(reg)  "\tsxt\t2, %%%0, %%%c\n"  cvtsize(4, 1)
+reg: CVUI8(reg)  "\tsxt\t4, %%%0, %%%c\n"  cvtsize(1, 1)
+reg: CVUU8(reg)  "\tsxt\t4, %%%0, %%%c\n"  cvtsize(1, 1)
+reg: CVUI8(reg)  "\tsxt\t5, %%%0, %%%c\n"  cvtsize(2, 1)
+reg: CVUU8(reg)  "\tsxt\t5, %%%0, %%%c\n"  cvtsize(2, 1)
+reg: CVUI8(reg)  "\tsxt\t6, %%%0, %%%c\n"  cvtsize(4, 1)
+reg: CVUU8(reg)  "\tsxt\t6, %%%0, %%%c\n"  cvtsize(4, 1)
 
 reg: MULI4(rc5,rc)  "\tmuls\t%0, %1, %%%c\n"  6
 reg: MULU4(rc5,rc)  "\tmuls\t%0, %1, %%%c\n"  6
@@ -537,14 +538,14 @@ reg: NEGF8(reg)   "\txord\t%%%0, 0x8000000000000000, %%%c\n"  1
 
 reg: CVFF4(reg)  "\tfdtofs\t%%%0, %%%c\n"  1
 reg: CVFF8(reg)  "\tfstofd\t%%%0, %%%c\n"  1
-reg: CVFI4(reg)  "\tfstoistr\t%%%0, %%%c\n"  (a->syms[0]->u.c.v.i == 4 ? 3 : LBURG_MAX)
-reg: CVFI4(reg)  "\tfdtoistr\t%%%0, %%%c\n"  (a->syms[0]->u.c.v.i == 8 ? 3 : LBURG_MAX)
-reg: CVFI8(reg)  "\tfstoidtr\t%%%0, %%%c\n"  (a->syms[0]->u.c.v.i == 4 ? 3 : LBURG_MAX)
-reg: CVFI8(reg)  "\tfdtoidtr\t%%%0, %%%c\n"  (a->syms[0]->u.c.v.i == 8 ? 3 : LBURG_MAX)
-reg: CVIF4(reg)  "\tistofs\t%%%0, %%%c\n"  (a->syms[0]->u.c.v.i == 4 ? 3 : LBURG_MAX)
-reg: CVIF4(reg)  "\tidtofs\t%%%0, %%%c\n"  (a->syms[0]->u.c.v.i == 8 ? 3 : LBURG_MAX)
-reg: CVIF8(reg)  "\tistofd\t%%%0, %%%c\n"  (a->syms[0]->u.c.v.i == 4 ? 3 : LBURG_MAX)
-reg: CVIF8(reg)  "\tidtofd\t%%%0, %%%c\n"  (a->syms[0]->u.c.v.i == 8 ? 3 : LBURG_MAX)
+reg: CVFI4(reg)  "\tfstoistr\t%%%0, %%%c\n"  cvtsize(4, 3)
+reg: CVFI4(reg)  "\tfdtoistr\t%%%0, %%%c\n"  cvtsize(8, 3)
+reg: CVFI8(reg)  "\tfstoidtr\t%%%0, %%%c\n"  cvtsize(4, 3)
+reg: CVFI8(reg)  "\tfdtoidtr\t%%%0, %%%c\n"  cvtsize(8, 3)
+reg: CVIF4(reg)  "\tistofs\t%%%0, %%%c\n"  cvtsize(4, 3)
+reg: CVIF4(reg)  "\tidtofs\t%%%0, %%%c\n"  cvtsize(8, 3)
+reg: CVIF8(reg)  "\tistofd\t%%%0, %%%c\n"  cvtsize(4, 3)
+reg: CVIF8(reg)  "\tidtofd\t%%%0, %%%c\n"  cvtsize(8, 3)
 
 label: ADDRGP8  "%a"
 stmt: JUMPV(label)  "\tibranch\t%0\n"   2
