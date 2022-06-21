@@ -756,8 +756,10 @@ static void clobber(Node p) {
 }
 
 static void doarg(Node p) {
+	int size;
 	assert(p && p->syms[0]);
-	p->syms[RX] = intconst(mkactual(8, p->syms[0]->u.c.v.i) / 8);
+	size = p->syms[0]->u.c.v.i;
+	p->syms[RX] = intconst(mkactual(size > 8 ? 16 : 8, size) >> 3);
 }
 
 /* TODO: better implementation */
@@ -856,6 +858,7 @@ static void function(Symbol f, Symbol caller[], Symbol callee[], int ncalls) {
 		Symbol p = callee[i], q = caller[i];
 		int size = roundup(q->type->size, 8);
 		assert(q);
+		if (size > 8) offset = roundup(offset, 16);
 		if (offset + size > 64) {
 			p->x.offset = q->x.offset = offset;
 			p->x.name = q->x.name = stringd(offset);
@@ -899,10 +902,10 @@ static void function(Symbol f, Symbol caller[], Symbol callee[], int ncalls) {
 	print("\t.align\t8\n%s:\n", f->x.name);
 	print("\t{\n");
 	if (ncalls) print(
-			"\t  setwd\twsz = 16, nfx = 1, dbl = 0\n"
+			"\t  setwd\twsz = 16, nfx = 1, dbl = 1\n"
 			"\t  setbn\trbs = 12, rsz = 3, rcur = 0\n");
 	else print(
-			"\t  setwd\twsz = 12, nfx = 1, dbl = 0\n");
+			"\t  setwd\twsz = 12, nfx = 1, dbl = 1\n");
 	if (framesize || autoargs || retstruct)
 		print("\t  getsp\t%d, %%r23\n", -framesize);
 	print("\t}\n");
