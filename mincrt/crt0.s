@@ -11,13 +11,11 @@ SYS_exit = 1
 	.align	8
 _start:
 	{
+		nop 1
 		setwd wsz = 8, nfx = 1, dbl = 0
 		setbn rbs = 4, rsz = 3, rcur = 0
-		disp %ctpr1, main; ipd 2
-	}
-	{
-		nop 1
 		getsp,0 0, %r0
+		disp %ctpr1, main; ipd 2
 	}
 	{
 		nop 3

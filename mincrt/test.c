@@ -15,12 +15,13 @@ long syscall(long, ...);
 #define EOF -1
 
 static int getchar() {
-	char ch;
-	return syscall(SYS_read, 1, &ch, 1) == 1 ? ch : EOF;
+	unsigned char ch;
+	return syscall(SYS_read, 0, &ch, 1) == 1 ? ch : EOF;
 }
 
 static int putchar(int ch) {
-	return syscall(SYS_write, 1, &ch, 1) == 1 ? ch : EOF;
+	unsigned char tmp = ch;
+	return syscall(SYS_write, 1, &tmp, 1) == 1 ? ch : EOF;
 }
 
 static size_t strlen(const char *s) {
