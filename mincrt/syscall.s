@@ -1,3 +1,5 @@
+! -*- tab-width: 8 -*-
+
 	.file "syscall.s"
 	.ignore	ld_st_style
 	.text
