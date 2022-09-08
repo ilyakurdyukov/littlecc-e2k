@@ -398,7 +398,7 @@ reg: CVUI8(INDIRU4(addr))  "\tldw\t%0, %%%c\n"  1
 reg: LOADI1(reg)  "\tadds\t0, %%%0, %%%c\n"  move(a)
 reg: LOADI2(reg)  "\tadds\t0, %%%0, %%%c\n"  move(a)
 reg: LOADI4(reg)  "\tadds\t0, %%%0, %%%c\n"  move(a)
-reg: LOADI8(reg)  "\tadds\t0, %%%0, %%%c\n"  move(a)
+reg: LOADI8(reg)  "\taddd\t0, %%%0, %%%c\n"  move(a)
 reg: LOADP8(reg)  "\taddd\t0, %%%0, %%%c\n"  move(a)
 reg: LOADU1(reg)  "\tadds\t0, %%%0, %%%c\n"  move(a)
 reg: LOADU2(reg)  "\tadds\t0, %%%0, %%%c\n"  move(a)
