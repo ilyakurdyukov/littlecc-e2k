@@ -8,13 +8,11 @@
 	.align	8
 syscall:
 	{
+		nop 1
 		setwd wsz = 8, nfx = 1, dbl = 0
 		setbn rbs = 4, rsz = 3, rcur = 0
-		sdisp %ctpr1, 3
+		sdisp %ctpr1, 3; ipd 2
 		shld 1, 5, %r2
-	}
-	{
-		nop 1
 		getsp,0 0, %r1
 	}
 	{
@@ -25,6 +23,7 @@ syscall:
 		addd %r1, %r2, %r2
 	}
 	{
+		nop 1
 		ldd,sm 0, %r2, %b[4]
 		ldd,sm 8, %r2, %b[5]
 		ldd,sm 16, %r2, %b[6]

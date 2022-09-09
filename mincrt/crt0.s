@@ -15,39 +15,35 @@ _start:
 		setwd wsz = 8, nfx = 1, dbl = 0
 		setbn rbs = 4, rsz = 3, rcur = 0
 		getsp,0 0, %r0
-		disp %ctpr1, main; ipd 2
+		disp %ctpr3, 1f; ipd 2
 	}
 	{
 		nop 3
 		disp %ctpr2, 2f; ipd 2
 		ldd %r0, 0, %b[0]  ! argc
 		ldd %r0, 8, %r3  ! unparsed argv
+		subd 0, 3, %r2  ! 16 (call args) + 8 (null)
 	}
 	{
+		disp %ctpr1, main; ipd 2
 		addd %b[0], 0, %r1
-		addd %b[0], 9, %r2
+		subd %r2, %b[0], %r2
 	}
 	{
 		shld %r2, 3, %r2
 	}
 	{
-		subd 0, %r2, %r2
-	}
-	{
-		andnd %r2, 15, %r2
-	}
-	{
 		nop 1
 		! alloca(argc * 8 + 8)
+		! getsp will ignore the lower 4 bits (align by 16)
 		getsp,0 %r2, %r2
 	}
 	{
 		nop 2
-		addd %r2, 64, %b[1]  ! argv
-		addd %r2, 64, %r2
-		ldb,sm 0, %r3, %r5
+		addd 16, %r2, %b[1]  ! argv
+		ldb,sm %r3, 0, %r5
 		cmpedb %r1, 0, %pred1
-		ibranch	1f; ipd 3
+		ct %ctpr3; ipd 3
 	}
 2:	{
 		nop 2
@@ -61,8 +57,8 @@ _start:
 1:	{
 		cmpedb %r1, 1, %pred1
 		subd %r1, 1, %r1
-		std %r2, 0, %r3 ? ~%pred1
-		std %r2, 0, %r1 ? %pred1  ! write NULL
+		std %r2, 16, %r3 ? ~%pred1
+		std %r2, 16, %r1 ? %pred1  ! write NULL
 		addd %r2, 8, %r2
 		ct %ctpr2 ? ~%pred1; ipd 3
 	}
